@@ -117,4 +117,36 @@ document.addEventListener('DOMContentLoaded', function () {
       header.classList.toggle('scrolled', window.scrollY > 8);
     }, { passive: true });
   }
+
+  /* ---- Scroll-reveal animations (applied automatically, no per-page markup needed) ---- */
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var revealTargets = document.querySelectorAll(
+      '.section-head, .card, .service-card, .review-card, .step, .stat-band > div, ' +
+      '.promo, .cta-banner, .split, .gallery-item, .area-list li, .contact-card, ' +
+      '.review-source-card, .trust-strip .item'
+    );
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealTargets.forEach(function (el, i) {
+      el.classList.add('reveal');
+      el.style.transitionDelay = (Math.min(i % 6, 6) * 0.06) + 's';
+      io.observe(el);
+    });
+  }
+
+  /* ---- Subtle parallax on photo-hero background ---- */
+  var heroBg = document.querySelector('.hero-bg');
+  if (heroBg && !reduceMotion) {
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY;
+      if (y < 800) heroBg.style.transform = 'translateY(' + (y * 0.15) + 'px)';
+    }, { passive: true });
+  }
 });
