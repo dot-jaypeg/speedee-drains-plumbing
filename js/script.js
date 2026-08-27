@@ -196,4 +196,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  /* ---- Subtle parallax on photo-hero background ---- */
+  var heroBg = document.querySelector('.hero-bg');
+  if (heroBg && !reduceMotion) {
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY;
+      if (y < 800) heroBg.style.transform = 'translateY(' + (y * 0.15) + 'px)';
+    }, { passive: true });
+  }
 });
