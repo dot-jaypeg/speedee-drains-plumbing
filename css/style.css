@@ -733,6 +733,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   width: 20px;
   height: 20px;
   fill: var(--white);
+  transition: fill 0.3s ease;
 }
 .service-card:hover .icon-wrap { background: var(--white); }
 .service-card:hover .icon-wrap i {
@@ -742,6 +743,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
+.service-card:hover .icon-wrap svg { fill: url(#svcGrad); }
 .service-card .body { padding: 28px; display: flex; flex-direction: column; flex: 1; }
 .service-card h3 { margin-bottom: 10px; transition: color 0.3s ease; }
 .service-card p { flex: 1; font-size: 0.97rem; transition: color 0.3s ease; }
