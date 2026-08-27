@@ -2,14 +2,6 @@
    Speedee Drains & Plumbing — Design System
    ========================================================================== */
 
-/* Rotating gradient ring: a masked pseudo-element shows a conic-gradient
-   only in a thin ring around the box, then the whole ring is spun with
-   `transform: rotate` — plain transform animation, no @property involved,
-   so it's guaranteed to actually animate everywhere. */
-@keyframes ringSpin {
-  to { transform: rotate(360deg); }
-}
-
 /* ---- Self-hosted brand fonts ---- */
 @font-face {
   font-family: 'Oswald';
@@ -836,13 +828,8 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   content: "";
   position: absolute;
   inset: -3px;
-  padding: 3px;
-  background: var(--stripe-rb);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  animation: ringSpin 6s linear infinite;
+  border: 3px solid transparent;
+  background: linear-gradient(transparent, transparent) padding-box, var(--stripe-rb) border-box;
   pointer-events: none;
 }
 .split-media img { width: 100%; height: 100%; object-fit: cover; }
@@ -893,7 +880,9 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 
 /* ---- CTA banner ---- */
 .cta-banner {
-  background: linear-gradient(115deg, var(--red-700), var(--red-600) 55%, var(--blue-600));
+  background:
+    linear-gradient(115deg, var(--red-700), var(--red-600) 55%, var(--blue-600)) padding-box,
+    var(--stripe-rb) border-box;
   color: var(--white);
   border-radius: var(--radius-lg);
   padding: 58px;
@@ -916,15 +905,11 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 .cta-banner::after {
   content: "";
   position: absolute;
-  inset: 0;
-  padding: 3px;
-  background: var(--stripe-rb);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  animation: ringSpin 6s linear infinite;
-  pointer-events: none;
+  right: -40px; top: -60px;
+  width: 260px; height: 260px;
+  background: rgba(255,255,255,0.14);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: spinSlow 45s linear infinite;
 }
 .cta-banner > * { position: relative; z-index: 1; }
 .cta-banner h2 { color: var(--white); margin-bottom: 8px; }
@@ -933,7 +918,9 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 
 /* ---- Promo strip ---- */
 .promo {
-  background: var(--navy-900);
+  background:
+    linear-gradient(var(--navy-900), var(--navy-900)) padding-box,
+    var(--stripe-rb) border-box;
   color: var(--white);
   border-radius: var(--radius-lg);
   padding: 42px 46px;
@@ -947,19 +934,6 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   overflow: hidden;
 }
 .promo::before { content: ""; position: absolute; inset: 0; background: var(--dot-pattern) 0 0/24px 24px; }
-.promo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 3px;
-  background: var(--stripe-rb);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  animation: ringSpin 6s linear infinite;
-  pointer-events: none;
-}
 .promo > * { position: relative; z-index: 1; }
 .promo .price {
   font-family: var(--font-display);
@@ -1333,10 +1307,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 @media (prefers-reduced-motion: reduce) {
   .section::before, .hero::before, .hero-block::after, .cta-banner::after,
   .hero .btn-red, .hero-block .btn-red,
-  .topbar-msg .dot,
-  .eyebrow::before, .hero::after, .page-header::after, .card::before,
-  .service-card::before, .promo::after, .split-media::after,
-  .review-card::before, .review-source-card::before,
+  .topbar-msg .dot, .eyebrow::before,
   .hero-content > *, .hero-block .container > *, .page-header .container > * { animation: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
