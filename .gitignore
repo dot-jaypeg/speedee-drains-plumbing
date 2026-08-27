@@ -1,0 +1,4 @@
+.DS_Store
+
+# Contains client domain registrar credentials — keep out of version control
+assets/references/speedee-drains-and-plumbing-onboarding.md
