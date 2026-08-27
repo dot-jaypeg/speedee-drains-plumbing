@@ -28,14 +28,28 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   /* ---- FAQ accordion ---- */
+  function closeFaqItem(i) {
+    i.classList.remove('open');
+    var a = i.querySelector('.faq-a');
+    if (a) a.style.maxHeight = '';
+  }
+  function openFaqItem(i) {
+    i.classList.add('open');
+    var a = i.querySelector('.faq-a');
+    if (a) a.style.maxHeight = a.scrollHeight + 'px';
+  }
   document.querySelectorAll('.faq-item').forEach(function (item) {
     var q = item.querySelector('.faq-q');
     if (!q) return;
     q.addEventListener('click', function () {
       var wasOpen = item.classList.contains('open');
-      item.parentElement.querySelectorAll('.faq-item').forEach(function (i) { i.classList.remove('open'); });
-      if (!wasOpen) item.classList.add('open');
+      item.parentElement.querySelectorAll('.faq-item').forEach(closeFaqItem);
+      if (!wasOpen) openFaqItem(item);
     });
+  });
+  window.addEventListener('resize', function () {
+    var openItem = document.querySelector('.faq-item.open');
+    if (openItem) openFaqItem(openItem);
   });
 
   /* ---- Gallery lightbox ---- */

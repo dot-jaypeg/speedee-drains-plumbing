@@ -1197,19 +1197,15 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 }
 .faq-q .plus::before { top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }
 .faq-q .plus::after { left: 50%; top: 0; height: 100%; width: 2px; transform: translateX(-50%); }
-/* Smooth height animation via grid-template-rows (0fr -> 1fr) — this
-   tracks the answer's real content height exactly, unlike animating
-   max-height against a guessed cap, which is what made this feel
-   stiff/inconsistent before. */
+/* Height animates via an inline max-height that JS sets to the answer's
+   real scrollHeight on open (see js/script.js) — so it always matches
+   the actual content instead of guessing a flat cap for every answer. */
 .faq-a {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.4s cubic-bezier(.4,0,.2,1);
-}
-.faq-item.open .faq-a { grid-template-rows: 1fr; }
-.faq-a p {
+  max-height: 0;
   overflow: hidden;
-  min-height: 0;
+  transition: max-height 0.4s cubic-bezier(.4,0,.2,1);
+}
+.faq-a p {
   padding-bottom: 22px;
   margin: 0;
 }
