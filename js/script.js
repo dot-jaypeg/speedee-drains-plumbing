@@ -152,12 +152,48 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---- Subtle parallax on photo-hero background ---- */
-  var heroBg = document.querySelector('.hero-bg');
-  if (heroBg && !reduceMotion) {
-    window.addEventListener('scroll', function () {
-      var y = window.scrollY;
-      if (y < 800) heroBg.style.transform = 'translateY(' + (y * 0.15) + 'px)';
-    }, { passive: true });
+  /* ---- Stat counters: count up from 0 to their target once scrolled into view ---- */
+  var countEls = document.querySelectorAll('.count[data-count-to]');
+  function formatCount(value, decimals) {
+    return decimals ? value.toFixed(decimals) : Math.round(value).toString();
   }
+  function finishCount(el, target, decimals) {
+    el.textContent = formatCount(target, decimals);
+  }
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count-to'));
+    var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var duration = 1400;
+    var start = null;
+    function step(timestamp) {
+      if (start === null) start = timestamp;
+      var progress = Math.min((timestamp - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = formatCount(target * eased, decimals);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        finishCount(el, target, decimals);
+      }
+    }
+    window.requestAnimationFrame(step);
+  }
+  if (countEls.length) {
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      countEls.forEach(function (el) {
+        finishCount(el, parseFloat(el.getAttribute('data-count-to')), parseInt(el.getAttribute('data-decimals') || '0', 10));
+      });
+    } else {
+      var countIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateCount(entry.target);
+            countIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      countEls.forEach(function (el) { countIO.observe(el); });
+    }
+  }
+
 });
