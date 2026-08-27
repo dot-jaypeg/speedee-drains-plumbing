@@ -725,6 +725,11 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   color: var(--white);
   transition: color 0.3s ease;
 }
+.service-card .icon-wrap svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--white);
+}
 .service-card:hover .icon-wrap { background: var(--white); }
 .service-card:hover .icon-wrap i {
   background: linear-gradient(135deg, var(--red-600), var(--blue-600));
