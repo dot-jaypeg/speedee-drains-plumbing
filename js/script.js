@@ -47,10 +47,21 @@ document.addEventListener('DOMContentLoaded', function () {
       return { src: el.getAttribute('data-full') || el.querySelector('img').src, caption: el.getAttribute('data-caption') || '' };
     });
     var current = 0;
+    var firstShow = true;
     function show(i) {
       current = (i + images.length) % images.length;
-      lightboxImg.src = images[current].src;
-      lightboxImg.alt = images[current].caption;
+      if (firstShow) {
+        lightboxImg.src = images[current].src;
+        lightboxImg.alt = images[current].caption;
+        firstShow = false;
+        return;
+      }
+      lightboxImg.style.opacity = '0';
+      window.setTimeout(function () {
+        lightboxImg.src = images[current].src;
+        lightboxImg.alt = images[current].caption;
+        lightboxImg.style.opacity = '1';
+      }, 180);
     }
     galleryItems.forEach(function (el, i) {
       el.addEventListener('click', function () {
