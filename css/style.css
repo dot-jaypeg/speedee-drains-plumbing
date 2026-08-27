@@ -591,8 +591,9 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   bottom: -60px;
   width: 320px;
   height: 320px;
-  background: repeating-linear-gradient(-35deg, var(--red-600) 0 10px, transparent 10px 22px);
-  opacity: 0.2;
+  background: rgba(255,255,255,0.08);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: spinSlow 50s linear infinite;
 }
 .hero-block .container { position: relative; z-index: 1; }
 .hero-block h1 { color: var(--white); max-width: 700px; }
@@ -1308,7 +1309,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 
 /* Reduced motion: kill decorative animation, keep transitions instant */
 @media (prefers-reduced-motion: reduce) {
-  .section::before, .hero::before, .hero-block::after, .cta-banner::after,
+  .section::before, .hero::before, .hero-block::after, .hero-block .stripes, .cta-banner::after,
   .hero .btn-red, .hero-block .btn-red,
   .topbar-msg .dot, .eyebrow::before,
   .hero-content > *, .hero-block .container > *, .page-header .container > * { animation: none !important; }
