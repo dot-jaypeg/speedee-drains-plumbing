@@ -4,24 +4,19 @@
 
 /* ---- Self-hosted brand fonts ---- */
 @font-face {
-  font-family: 'League Gothic Condensed';
-  src: url('/assets/fonts/header/LeagueGothic-CondensedRegular.otf') format('opentype');
+  font-family: 'Oswald';
+  src: url('/assets/fonts/header/Oswald-Light.ttf') format('truetype');
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Oswald';
+  src: url('/assets/fonts/header/Oswald-Regular.ttf') format('truetype');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: 'League Gothic Condensed';
-  src: url('/assets/fonts/header/LeagueGothic-CondensedItalic.otf') format('opentype');
-  font-weight: 400; font-style: italic; font-display: swap;
-}
-@font-face {
-  font-family: 'League Gothic';
-  src: url('/assets/fonts/header/LeagueGothic-Regular.otf') format('opentype');
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'League Gothic';
-  src: url('/assets/fonts/header/LeagueGothic-Italic.otf') format('opentype');
-  font-weight: 400; font-style: italic; font-display: swap;
+  font-family: 'Oswald';
+  src: url('/assets/fonts/header/Oswald-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Gravity';
@@ -96,7 +91,7 @@
   --gray-700: #3D4552;
   --gray-900: #1A1F27;
 
-  --font-display: 'League Gothic Condensed', 'League Gothic', 'Arial Narrow', sans-serif;
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
   --font-body: 'Gravity', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --container: 1200px;
@@ -146,11 +141,14 @@ h2 { font-size: clamp(2.1rem, 3.8vw, 3.1rem); }
 h3 { font-size: clamp(1.35rem, 2.2vw, 1.7rem); }
 p { margin: 0 0 1em; color: var(--gray-700); }
 
-/* Any element on the display face should stay at its natural (non-bold) weight —
-   League Gothic has no bold cut, so requesting 700 would trigger ugly faux-bold. */
-h1, h2, h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
-.nav-phone strong, .service-card .link, .step .step-num, .promo .price,
-.stat-band .num, .faq-q, .site-footer h4, .newsletter-form button, .badge,
+/* Oswald ships Light/Regular/Bold — give the loud headline elements real
+   bold weight, keep smaller UI text at Regular for legibility. */
+h1, h2, .promo .price, .stat-band .num {
+  font-weight: 700;
+}
+h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
+.nav-phone strong, .service-card .link, .step .step-num,
+.faq-q, .site-footer h4, .newsletter-form button, .badge,
 .review-source-card .rating, .mobile-nav > ul > li > a, .ticker-track span,
 .section-head .eyebrow, .price-tag {
   font-weight: 400;
