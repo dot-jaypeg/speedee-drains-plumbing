@@ -2,28 +2,12 @@
    Speedee Drains & Plumbing — Design System
    ========================================================================== */
 
-/* Registered as an animatable angle so the conic-gradient stroke can actually
-   spin (a plain custom property can't be smoothly interpolated by browsers). */
-@property --grad-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-@keyframes rotateGradient {
-  to { --grad-angle: 360deg; }
-}
-/* Every element painted with the --stripe-rb conic gradient spins in place.
-   (.eyebrow::before is handled separately below — it already has its own
-   draw-in animation and needs both combined in one property.) */
-.section::before,
-.hero::after,
-.page-header::after,
-.card::before,
-.service-card::before,
-.promo,
-.review-card::before,
-.review-source-card::before {
-  animation: rotateGradient 6s linear infinite;
+/* Rotating gradient ring: a masked pseudo-element shows a conic-gradient
+   only in a thin ring around the box, then the whole ring is spun with
+   `transform: rotate` — plain transform animation, no @property involved,
+   so it's guaranteed to actually animate everywhere. */
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
 }
 
 /* ---- Self-hosted brand fonts ---- */
@@ -131,7 +115,7 @@
 
   --dot-pattern: radial-gradient(circle, rgba(255,255,255,0.07) 1.4px, transparent 1.4px);
   --dot-pattern-dark: radial-gradient(circle, rgba(1,30,62,0.08) 1.4px, transparent 1.4px);
-  --stripe-rb: conic-gradient(from var(--grad-angle), var(--blue-600), var(--red-600), var(--blue-600));
+  --stripe-rb: conic-gradient(from 180deg, var(--blue-600), var(--red-600), var(--blue-600));
 }
 
 /* ---- Reset ---- */
@@ -207,7 +191,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   background: var(--stripe-rb);
   display: inline-block;
   border-radius: 0;
-  animation: eyebrowDraw 0.5s ease both, rotateGradient 6s linear infinite;
+  animation: eyebrowDraw 0.5s ease both;
   transform-origin: left center;
 }
 @keyframes eyebrowDraw {
@@ -216,7 +200,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 }
 /* Re-trigger the draw-in the moment a scroll-revealed section actually becomes visible */
 .reveal.in-view .eyebrow::before {
-  animation: eyebrowDraw 0.5s ease both, rotateGradient 6s linear infinite;
+  animation: eyebrowDraw 0.5s ease both;
 }
 .section { padding: 92px 0; position: relative; overflow: hidden; }
 .section--tight { padding: 58px 0; }
@@ -836,11 +820,9 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 .split.reverse .split-media { order: 2; }
 .split-media {
   border-radius: var(--radius-lg);
-  overflow: hidden;
   box-shadow: var(--shadow-lg);
   position: relative;
   border: 5px solid var(--white);
-  outline: 3px solid var(--navy-900);
 }
 .split-media::before {
   content: "";
@@ -849,6 +831,19 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   background: linear-gradient(160deg, rgba(172,0,28,0.14), transparent 40%);
   pointer-events: none;
   z-index: 1;
+}
+.split-media::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  padding: 3px;
+  background: var(--stripe-rb);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: ringSpin 6s linear infinite;
+  pointer-events: none;
 }
 .split-media img { width: 100%; height: 100%; object-fit: cover; }
 .split-media .badge {
@@ -909,7 +904,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   flex-wrap: wrap;
   position: relative;
   overflow: hidden;
-  border: 3px solid rgba(255,255,255,0.15);
+  border: 3px solid transparent;
 }
 .cta-banner::before {
   content: "";
@@ -921,11 +916,15 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 .cta-banner::after {
   content: "";
   position: absolute;
-  right: -40px; top: -60px;
-  width: 260px; height: 260px;
-  background: rgba(255,255,255,0.14);
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-  animation: spinSlow 45s linear infinite;
+  inset: 0;
+  padding: 3px;
+  background: var(--stripe-rb);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: ringSpin 6s linear infinite;
+  pointer-events: none;
 }
 .cta-banner > * { position: relative; z-index: 1; }
 .cta-banner h2 { color: var(--white); margin-bottom: 8px; }
@@ -934,9 +933,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 
 /* ---- Promo strip ---- */
 .promo {
-  background:
-    linear-gradient(var(--navy-900), var(--navy-900)) padding-box,
-    var(--stripe-rb) border-box;
+  background: var(--navy-900);
   color: var(--white);
   border-radius: var(--radius-lg);
   padding: 42px 46px;
@@ -950,6 +947,19 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   overflow: hidden;
 }
 .promo::before { content: ""; position: absolute; inset: 0; background: var(--dot-pattern) 0 0/24px 24px; }
+.promo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  background: var(--stripe-rb);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: ringSpin 6s linear infinite;
+  pointer-events: none;
+}
 .promo > * { position: relative; z-index: 1; }
 .promo .price {
   font-family: var(--font-display);
@@ -1325,7 +1335,8 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   .hero .btn-red, .hero-block .btn-red,
   .topbar-msg .dot,
   .eyebrow::before, .hero::after, .page-header::after, .card::before,
-  .service-card::before, .promo, .review-card::before, .review-source-card::before,
+  .service-card::before, .promo::after, .split-media::after,
+  .review-card::before, .review-source-card::before,
   .hero-content > *, .hero-block .container > *, .page-header .container > * { animation: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
