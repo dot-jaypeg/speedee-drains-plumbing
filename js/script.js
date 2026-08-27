@@ -121,12 +121,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  /* ---- Header shadow on scroll ---- */
+  /* ---- Header crossfade: transparent-over-hero until the hero-like section scrolls past it ---- */
   var header = document.querySelector('.site-header');
-  if (header) {
-    window.addEventListener('scroll', function () {
-      header.classList.toggle('scrolled', window.scrollY > 8);
-    }, { passive: true });
+  var heroLike = document.querySelector('.hero, .hero-block, .page-header');
+  if (header && heroLike) {
+    var checkHeaderState = function () {
+      var heroBottom = heroLike.getBoundingClientRect().bottom;
+      header.classList.toggle('scrolled', heroBottom <= header.offsetHeight);
+    };
+    window.addEventListener('scroll', checkHeaderState, { passive: true });
+    window.addEventListener('resize', checkHeaderState);
+    checkHeaderState();
+  } else if (header) {
+    header.classList.add('scrolled');
   }
 
   /* ---- Scroll-reveal animations (applied automatically, no per-page markup needed) ---- */

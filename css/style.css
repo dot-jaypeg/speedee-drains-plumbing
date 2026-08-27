@@ -107,7 +107,7 @@
 
   --dot-pattern: radial-gradient(circle, rgba(255,255,255,0.07) 1.4px, transparent 1.4px);
   --dot-pattern-dark: radial-gradient(circle, rgba(1,30,62,0.08) 1.4px, transparent 1.4px);
-  --stripe-rb: repeating-linear-gradient(90deg, var(--red-600) 0 26px, var(--blue-600) 26px 52px);
+  --stripe-rb: repeating-linear-gradient(90deg, var(--red-600) 0, var(--blue-600) 52px, var(--red-600) 104px);
 }
 
 /* ---- Reset ---- */
@@ -352,13 +352,21 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 .topbar-social svg { width: 15px; height: 15px; fill: currentColor; }
 
 /* ---- Main nav ---- */
+/* Topbar + header are both fixed and stacked (topbar 0–40px, header 40–124px)
+   so the header can float, transparent, over each page's dark top section
+   (hero / hero-block / page-header) and crossfade to solid once scrolled past it. */
+.topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 101; }
 .site-header {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: var(--topbar-h);
+  left: 0; right: 0;
   z-index: 100;
+  background: transparent;
+  box-shadow: none;
+  transition: background-color 0.35s ease, box-shadow 0.35s ease;
+}
+.site-header.scrolled {
   background: var(--white);
-  border-bottom: 4px solid var(--red-600);
-  border-image: var(--stripe-rb) 1;
   box-shadow: 0 4px 16px rgba(1,30,62,0.1);
 }
 .navbar {
@@ -366,14 +374,20 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
 }
 .brand { display: flex; align-items: center; gap: 12px; }
-.brand img { height: 58px; width: auto; filter: drop-shadow(0 3px 6px rgba(1,30,62,0.18)); }
+.brand img {
+  height: 58px;
+  width: auto;
+  filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+  transition: filter 0.35s ease;
+}
+.site-header.scrolled .brand img { filter: drop-shadow(0 3px 6px rgba(1,30,62,0.18)); }
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
   justify-content: center;
 }
@@ -382,18 +396,24 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 10px 12px;
+  padding: 10px 11px;
   font-family: var(--font-display);
   text-transform: uppercase;
-  font-size: 0.86rem;
+  font-size: 0.83rem;
   letter-spacing: 0.02em;
-  color: var(--navy-900);
+  color: rgba(255,255,255,0.92);
   border-radius: var(--radius-sm);
   white-space: nowrap;
-  transition: color 0.15s, background 0.15s;
+  transition: color 0.2s ease, background 0.15s ease;
 }
-.nav-links > li > a:hover,
-.nav-links > li > a.active {
+.site-header.scrolled .nav-links > li > a { color: var(--navy-900); }
+.site-header .nav-links > li > a:hover,
+.site-header .nav-links > li > a.active {
+  color: var(--red-500);
+  background: rgba(255,255,255,0.14);
+}
+.site-header.scrolled .nav-links > li > a:hover,
+.site-header.scrolled .nav-links > li > a.active {
   color: var(--red-600);
   background: var(--red-100);
 }
@@ -434,7 +454,9 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   margin-top: 6px;
   padding-top: 12px;
 }
-.nav-cta { display: flex; align-items: center; gap: 12px; }
+.nav-cta { display: flex; align-items: center; gap: 10px; }
+.nav-cta .btn { padding: 11px 18px; font-size: 0.8rem; }
+.nav-cta .btn svg { flex-shrink: 0; }
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -446,9 +468,11 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 .nav-toggle span {
   width: 26px;
   height: 3px;
-  background: var(--navy-900);
+  background: var(--white);
   border-radius: 0;
+  transition: background-color 0.3s ease;
 }
+.site-header.scrolled .nav-toggle span { background: var(--navy-900); }
 
 /* ---- Hero (photo) ---- */
 .hero {
@@ -546,7 +570,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
     var(--dot-pattern) 0 0/26px 26px,
     linear-gradient(120deg, var(--navy-900) 0%, var(--blue-700) 100%);
   color: var(--white);
-  padding: 126px 0 96px;
+  padding: 152px 0 96px;
   position: relative;
   overflow: hidden;
 }
@@ -589,7 +613,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
     var(--dot-pattern) 0 0/26px 26px,
     linear-gradient(135deg, var(--navy-900), var(--blue-700));
   color: var(--white);
-  padding: 68px 0 60px;
+  padding: 152px 0 60px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -673,33 +697,27 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--gray-100);
   border-top: 4px solid var(--red-600);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: background 0.3s ease, box-shadow 0.25s ease;
   height: 100%;
+  position: relative;
 }
 .grid > .service-card:nth-child(3n+2) { border-top-color: var(--blue-600); }
 .grid > .service-card:nth-child(3n+3) { border-top-color: var(--navy-900); }
-.service-card:hover { transform: translateY(-6px) rotate(-0.6deg); box-shadow: var(--shadow-lg); }
+.service-card:hover { background: var(--blue-600); box-shadow: var(--shadow-lg); }
+.service-card:hover h3,
+.service-card:hover p,
+.service-card:hover .link { color: var(--white); }
 .service-card .icon-wrap {
   width: 60px; height: 60px;
   border-radius: 0;
   background: linear-gradient(135deg, var(--red-600), var(--blue-600));
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 18px;
-  position: relative;
-  transform: rotate(-4deg);
-}
-.service-card .icon-wrap::before {
-  content: "";
-  position: absolute;
-  inset: -5px;
-  border-radius: 0;
-  border: 2px dashed rgba(172,0,28,0.35);
-  animation: spinSlow 18s linear infinite;
 }
 .service-card .icon-wrap svg { width: 28px; height: 28px; fill: var(--white); }
 .service-card .body { padding: 28px; display: flex; flex-direction: column; flex: 1; }
-.service-card h3 { margin-bottom: 10px; }
-.service-card p { flex: 1; font-size: 0.97rem; }
+.service-card h3 { margin-bottom: 10px; transition: color 0.3s ease; }
+.service-card p { flex: 1; font-size: 0.97rem; transition: color 0.3s ease; }
 .service-card .link {
   margin-top: 12px;
   font-family: var(--font-display);
@@ -710,7 +728,23 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  transition: color 0.3s ease;
 }
+/* Masking swipe reveal: a solid panel covers the card and retreats to the
+   right, uncovering the content underneath, instead of a fade/slide-in. */
+.service-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--blue-600);
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform 0.65s cubic-bezier(.4,0,.2,1);
+  z-index: 5;
+  pointer-events: none;
+}
+.service-card.reveal { opacity: 1; transform: none; transition: none; }
+.service-card.in-view::after { transform: scaleX(0); }
 .service-card figure { margin: 0; height: 190px; overflow: hidden; position: relative; }
 .service-card figure::after {
   content: "";
@@ -847,7 +881,9 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   position: absolute;
   right: -40px; top: -60px;
   width: 260px; height: 260px;
-  background: repeating-linear-gradient(-35deg, rgba(255,255,255,0.16) 0 8px, transparent 8px 18px);
+  background: rgba(255,255,255,0.14);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: spinSlow 45s linear infinite;
 }
 .cta-banner > * { position: relative; z-index: 1; }
 .cta-banner h2 { color: var(--white); margin-bottom: 8px; }
@@ -1224,8 +1260,8 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 
 /* Reduced motion: kill decorative animation, keep transitions instant */
 @media (prefers-reduced-motion: reduce) {
-  .section::before, .hero::before, .hero-block::after,
-  .service-card .icon-wrap::before, .hero .btn-red, .hero-block .btn-red,
+  .section::before, .hero::before, .hero-block::after, .cta-banner::after,
+  .hero .btn-red, .hero-block .btn-red,
   .topbar-msg .dot,
   .hero-content > *, .hero-block .container > *, .page-header .container > * { animation: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
