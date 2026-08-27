@@ -2,6 +2,30 @@
    Speedee Drains & Plumbing — Design System
    ========================================================================== */
 
+/* Registered as an animatable angle so the conic-gradient stroke can actually
+   spin (a plain custom property can't be smoothly interpolated by browsers). */
+@property --grad-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes rotateGradient {
+  to { --grad-angle: 360deg; }
+}
+/* Every element painted with the --stripe-rb conic gradient spins in place.
+   (.eyebrow::before is handled separately below — it already has its own
+   draw-in animation and needs both combined in one property.) */
+.section::before,
+.hero::after,
+.page-header::after,
+.card::before,
+.service-card::before,
+.promo,
+.review-card::before,
+.review-source-card::before {
+  animation: rotateGradient 6s linear infinite;
+}
+
 /* ---- Self-hosted brand fonts ---- */
 @font-face {
   font-family: 'Oswald';
@@ -107,7 +131,7 @@
 
   --dot-pattern: radial-gradient(circle, rgba(255,255,255,0.07) 1.4px, transparent 1.4px);
   --dot-pattern-dark: radial-gradient(circle, rgba(1,30,62,0.08) 1.4px, transparent 1.4px);
-  --stripe-rb: conic-gradient(from 180deg, var(--blue-600), var(--red-600), var(--blue-600));
+  --stripe-rb: conic-gradient(from var(--grad-angle), var(--blue-600), var(--red-600), var(--blue-600));
 }
 
 /* ---- Reset ---- */
@@ -183,7 +207,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   background: var(--stripe-rb);
   display: inline-block;
   border-radius: 0;
-  animation: eyebrowDraw 0.5s ease both;
+  animation: eyebrowDraw 0.5s ease both, rotateGradient 6s linear infinite;
   transform-origin: left center;
 }
 @keyframes eyebrowDraw {
@@ -192,7 +216,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 }
 /* Re-trigger the draw-in the moment a scroll-revealed section actually becomes visible */
 .reveal.in-view .eyebrow::before {
-  animation: eyebrowDraw 0.5s ease both;
+  animation: eyebrowDraw 0.5s ease both, rotateGradient 6s linear infinite;
 }
 .section { padding: 92px 0; position: relative; overflow: hidden; }
 .section--tight { padding: 58px 0; }
@@ -480,7 +504,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   position: absolute;
   inset: -4% -2%;
   background-size: cover;
-  background-position: center 20%;
+  background-position: center 30%;
   will-change: transform;
 }
 .hero-bg::after {
@@ -1300,6 +1324,8 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   .section::before, .hero::before, .hero-block::after, .cta-banner::after,
   .hero .btn-red, .hero-block .btn-red,
   .topbar-msg .dot,
+  .eyebrow::before, .hero::after, .page-header::after, .card::before,
+  .service-card::before, .promo, .review-card::before, .review-source-card::before,
   .hero-content > *, .hero-block .container > *, .page-header .container > * { animation: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
