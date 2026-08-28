@@ -165,34 +165,11 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   margin: 0 auto;
   padding: 0 24px;
 }
+/* Eyebrow labels (small subhead + dash above headings) are hidden
+   site-wide per feedback — the markup is still in every page's HTML,
+   this just removes them from render everywhere in one place. */
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 0.85rem;
-  color: var(--red-600);
-  margin-bottom: 14px;
-}
-.eyebrow::before {
-  content: "";
-  width: 30px;
-  height: 4px;
-  background: var(--stripe-rb);
-  display: inline-block;
-  border-radius: 0;
-  animation: eyebrowDraw 0.5s ease both;
-  transform-origin: left center;
-}
-@keyframes eyebrowDraw {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-/* Re-trigger the draw-in the moment a scroll-revealed section actually becomes visible */
-.reveal.in-view .eyebrow::before {
-  animation: eyebrowDraw 0.5s ease both;
+  display: none;
 }
 .section { padding: 92px 0; position: relative; overflow: hidden; }
 .section--tight { padding: 58px 0; }
