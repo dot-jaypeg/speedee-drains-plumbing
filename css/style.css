@@ -458,15 +458,19 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   inset: -4% -2%;
   background-size: cover;
   background-position: center 30%;
+  will-change: transform;
+}
+/* Ken Burns slideshow — homepage hero only (.hero--slideshow), never plain single-photo heroes */
+.hero--slideshow .hero-bg {
   opacity: 0;
   will-change: transform, opacity;
   animation: heroKenBurns 30s infinite;
 }
-.hero-bg:nth-child(1) { animation-delay: 0s; }
-.hero-bg:nth-child(2) { animation-delay: -6s; }
-.hero-bg:nth-child(3) { animation-delay: -12s; }
-.hero-bg:nth-child(4) { animation-delay: -18s; }
-.hero-bg:nth-child(5) { animation-delay: -24s; }
+.hero--slideshow .hero-bg:nth-child(1) { animation-delay: 0s; }
+.hero--slideshow .hero-bg:nth-child(2) { animation-delay: -6s; }
+.hero--slideshow .hero-bg:nth-child(3) { animation-delay: -12s; }
+.hero--slideshow .hero-bg:nth-child(4) { animation-delay: -18s; }
+.hero--slideshow .hero-bg:nth-child(5) { animation-delay: -24s; }
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -1309,12 +1313,12 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 /* Reduced motion: kill decorative animation, keep transitions instant */
 @media (prefers-reduced-motion: reduce) {
   .section::before, .hero::before, .hero-block::after, .hero-block .stripes, .cta-banner::after,
-  .hero .btn-red, .hero-block .btn-red, .hero-bg,
+  .hero .btn-red, .hero-block .btn-red, .hero--slideshow .hero-bg,
   .topbar-msg .dot, .eyebrow::before,
   .hero-content > *, .hero-block .container > *, .page-header .container > * { animation: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
-  .hero-bg { opacity: 0; }
-  .hero-bg:first-child { opacity: 1; }
+  .hero--slideshow .hero-bg { opacity: 0; }
+  .hero--slideshow .hero-bg:first-child { opacity: 1; }
 }
 
 /* ==========================================================================
