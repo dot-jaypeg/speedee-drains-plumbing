@@ -458,13 +458,26 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   inset: -4% -2%;
   background-size: cover;
   background-position: center 30%;
-  will-change: transform;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: heroKenBurns 30s infinite;
 }
-.hero-bg::after {
-  content: "";
+.hero-bg:nth-child(1) { animation-delay: 0s; }
+.hero-bg:nth-child(2) { animation-delay: -6s; }
+.hero-bg:nth-child(3) { animation-delay: -12s; }
+.hero-bg:nth-child(4) { animation-delay: -18s; }
+.hero-bg:nth-child(5) { animation-delay: -24s; }
+.hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(100deg, rgba(1,17,38,0.95) 18%, rgba(1,30,62,0.82) 52%, rgba(172,0,28,0.38) 100%);
+}
+@keyframes heroKenBurns {
+  0%   { opacity: 0; transform: scale(1); }
+  4%   { opacity: 1; }
+  17%  { opacity: 1; }
+  20%  { opacity: 0; transform: scale(1.12); }
+  100% { opacity: 0; transform: scale(1.12); }
 }
 .hero::before {
   content: "";
@@ -1296,10 +1309,12 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 /* Reduced motion: kill decorative animation, keep transitions instant */
 @media (prefers-reduced-motion: reduce) {
   .section::before, .hero::before, .hero-block::after, .hero-block .stripes, .cta-banner::after,
-  .hero .btn-red, .hero-block .btn-red,
+  .hero .btn-red, .hero-block .btn-red, .hero-bg,
   .topbar-msg .dot, .eyebrow::before,
   .hero-content > *, .hero-block .container > *, .page-header .container > * { animation: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .hero-bg { opacity: 0; }
+  .hero-bg:first-child { opacity: 1; }
 }
 
 /* ==========================================================================
