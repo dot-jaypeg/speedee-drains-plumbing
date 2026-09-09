@@ -452,6 +452,7 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   align-items: flex-start;
   color: var(--white);
   overflow: hidden;
+  background: #011126;
 }
 .hero-bg {
   position: absolute;
@@ -478,9 +479,9 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 }
 @keyframes heroKenBurns {
   0%   { opacity: 0; transform: scale(1); }
-  4%   { opacity: 1; }
-  17%  { opacity: 1; }
-  20%  { opacity: 0; transform: scale(1.12); }
+  10%  { opacity: 1; }
+  30%  { opacity: 1; }
+  40%  { opacity: 0; transform: scale(1.12); }
   100% { opacity: 0; transform: scale(1.12); }
 }
 .hero::before {
