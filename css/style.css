@@ -461,6 +461,12 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
   background-position: center 30%;
   will-change: transform;
 }
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(1,17,38,0.95) 18%, rgba(1,30,62,0.82) 52%, rgba(172,0,28,0.38) 100%);
+}
 /* Ken Burns slideshow — homepage hero only (.hero--slideshow), never plain single-photo heroes */
 .hero--slideshow .hero-bg {
   opacity: 0;
@@ -472,11 +478,6 @@ h3, h4, .eyebrow, .btn, .nav-links > li > a, .dropdown a.dropdown-all,
 .hero--slideshow .hero-bg:nth-child(3) { animation-delay: -12s; }
 .hero--slideshow .hero-bg:nth-child(4) { animation-delay: -18s; }
 .hero--slideshow .hero-bg:nth-child(5) { animation-delay: -24s; }
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(100deg, rgba(1,17,38,0.95) 18%, rgba(1,30,62,0.82) 52%, rgba(172,0,28,0.38) 100%);
-}
 @keyframes heroKenBurns {
   0%   { opacity: 0; transform: scale(1); }
   10%  { opacity: 1; }
