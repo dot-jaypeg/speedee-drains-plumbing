@@ -115,18 +115,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (response.ok) {
           form.reset();
           if (status) {
-            status.textContent = "Thanks — we'll be in touch shortly. For anything urgent, call 949-514-6751.";
+            status.textContent = "Thanks — we'll be in touch shortly. For anything urgent, call (657) 445-8176.";
             status.className = 'form-status show success';
           }
         } else {
           if (status) {
-            status.textContent = 'Something went wrong. Please call us at 949-514-6751 instead.';
+            status.textContent = 'Something went wrong. Please call us at (657) 445-8176 instead.';
             status.className = 'form-status show error';
           }
         }
       }).catch(function () {
         if (status) {
-          status.textContent = 'Something went wrong. Please call us at 949-514-6751 instead.';
+          status.textContent = 'Something went wrong. Please call us at (657) 445-8176 instead.';
           status.className = 'form-status show error';
         }
       }).finally(function () {
